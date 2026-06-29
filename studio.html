@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busca MPB - RM Content Studio</title>
+  
+  <style>
+    /* CSS AQUI */
+    :root {
+      --preto: #0A0A0A;
+      --branco: #FFFFFF;
+      --dourado: #C9A961;
+      --papel: #FAF8F3;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--papel);
+      color: var(--preto);
+      line-height: 1.6;
+    }
+    
+    header {
+      background: var(--preto);
+      color: var(--branco);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    header h1 { font-size: 1.3rem; }
+    
+    header .btn {
+      padding: 0.5rem 1rem;
+      background: var(--dourado);
+      color: var(--preto);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, rgba(201,169,97,0.2), transparent);
+    }
+    
+    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.2rem; color: #555; }
+    
+    .search-box {
+      max-width: 700px;
+      margin: -2rem auto 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .search-buttons button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--preto);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    .quick-searches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+    
+    .quick-searches button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .quick-searches button:hover {
+      background: var(--dourado);
+      border-color: var(--dourado);
+    }
+    
+    .results {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+    
+    .result-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .result-card h3 {
+      color: var(--dourado);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .result-card .link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--dourado);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    
+    .action-card {
+      background: var(--preto);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .action-card h3 { margin-bottom: 0.5rem; }
+    .action-card p { margin-bottom: 1.5rem; opacity: 0.8; }
+    
+    .btn-primary {
+      padding: 1rem 2rem;
+      background: var(--dourado);
+      color: var(--preto);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    @media (max-width: 600px) {
+      .hero h2 { font-size: 1.8rem; }
+      .search-box { margin: -1rem 1rem 2rem; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔍 Busca MPB</h1>
+    <a href="studio.html" class="btn">Ir para Studio</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Centro de Pesquisa da Música Brasileira</h2>
+      <p>Busque artistas, discos, canções em múltiplas fontes simultaneamente</p>
+    </section>
+
+    <section class="search-box">
+      <input type="text" id="searchInput" placeholder="Ex: Cartola, Elis Regina, Tropicália...">
+      <div class="search-buttons">
+        <button onclick="buscarTudo()">🔍 Buscar em Todas Fontes</button>
+      </div>
+      
+      <div class="quick-searches">
+        <button onclick="buscaRapida('Cartola')">Cartola</button>
+        <button onclick="buscaRapida('Chiquinha Gonzaga')">Chiquinha Gonzaga</button>
+        <button onclick="buscaRapida('Elis Regina')">Elis Regina</button>
+        <button onclick="buscaRapida('Tom Jobim')">Tom Jobim</button>
+        <button onclick="buscaRapida('Tropicália')">Tropicália</button>
+      </div>
+    </section>
+
+    <section id="results" class="results" style="display:none;">
+      <div class="result-card">
+        <h3>🎵 Cravo Albin</h3>
+        <div id="cravoResult"></div>
+        <a id="cravoLink" target="_blank" class="link">Ver no Cravo Albin →</a>
+      </div>
+
+      <div class="result-card">
+        <h3>🎨 Itaú Cultural</h3>
+        <div id="itaucResult"></div>
+        <a id="itaucLink" target="_blank" class="link">Ver no Itaú Cultural →</a>
+      </div>
+
+      <div class="result-card">
+        <h3>📰 Hemeroteca BN</h3>
+        <div id="bnResult"></div>
+        <a id="bnLink" target="_blank" class="link">Ver na Hemeroteca →</a>
+      </div>
+
+      <div class="result-card">
+        <h3>🎬 YouTube</h3>
+        <div id="youtubeResult"></div>
+        <a id="youtubeLink" target="_blank" class="link">Ver no YouTube →</a>
+      </div>
+
+      <div class="result-card">
+        <h3>📚 Google Acadêmico</h3>
+        <div id="scholarResult"></div>
+        <a id="scholarLink" target="_blank" class="link">Ver no Google Scholar →</a>
+      </div>
+
+      <div class="action-card">
+        <h3>🎯 Enviar para Studio</h3>
+        <p>Copie os dados encontrados e leve para o RM Content Studio</p>
+        <button onclick="enviarParaStudio()" class="btn-primary">Abrir no Studio</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // JAVASCRIPT AQUI
+    let termoBuscaAtual = '';
+    
+    function buscaRapida(termo) {
+      document.getElementById('searchInput').value = termo;
+      buscarTudo();
+    }
+    
+    function buscarTudo() {
+      const termo = document.getElementById('searchInput').value.trim();
+      if (!termo) {
+        alert('Digite um termo de busca');
+        return;
+      }
+      
+      termoBuscaAtual = termo;
+      
+      // Cravo Albin
+      buscarCravoAlbin(termo);
+      
+      // Itaú Cultural
+      buscarItauCultural(termo);
+      
+      // Hemeroteca BN
+      buscarHemeroteca(termo);
+      
+      // YouTube
+      buscarYouTube(termo);
+      
+      // Google Scholar
+      buscarScholar(termo);
+      
+      document.getElementById('results').style.display = 'block';
+    }
+    
+    function buscarCravoAlbin(termo) {
+      const slug = termo.toLowerCase().replace(/\s+/g, '-');
+      const url = `https://dicionariompb.com.br/${slug}`;
+      
+      document.getElementById('cravoLink').href = url;
+      document.getElementById('cravoResult').innerHTML = 
+        `<p>Buscando "${termo}" no Dicionário Cravo Albin...</p>`;
+    }
+    
+    function buscarItauCultural(termo) {
+      const url = `https://enciclopedia.itaucultural.org.br/pessoa?query=${encodeURIComponent(termo)}`;
+      
+      document.getElementById('itaucLink').href = url;
+      document.getElementById('itaucResult').innerHTML = 
+        `<p>Buscando "${termo}" na Enciclopédia Itaú Cultural...</p>`;
+    }
+    
+    function buscarHemeroteca(termo) {
+      const url = `https://hemerotecadigital.bn.gov.br/?query=${encodeURIComponent(termo)}`;
+      
+      document.getElementById('bnLink').href = url;
+      document.getElementById('bnResult').innerHTML = 
+        `<p>Buscando "${termo}" na Hemeroteca Digital...</p>`;
+    }
+    
+    function buscarYouTube(termo) {
+      const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(termo + ' música brasileira')}`;
+      
+      document.getElementById('youtubeLink').href = url;
+      document.getElementById('youtubeResult').innerHTML = 
+        `<p>Buscando vídeos sobre "${termo}"...</p>`;
+    }
+    
+    function buscarScholar(termo) {
+      const url = `https://scholar.google.com/scholar?q=${encodeURIComponent(termo + ' música brasileira MPB')}`;
+      
+      document.getElementById('scholarLink').href = url;
+      document.getElementById('scholarResult').innerHTML = 
+        `<p>Buscando artigos acadêmicos sobre "${termo}"...</p>`;
+    }
+    
+    function enviarParaStudio() {
+      localStorage.setItem('rm_busca_termo', termoBuscaAtual);
+      window.open('studio.html', '_blank');
+    }
+  </script>
+</body>
+</html>
