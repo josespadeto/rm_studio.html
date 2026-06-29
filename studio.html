@@ -3,308 +3,473 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Busca MPB - RM Content Studio</title>
+  <title>RM Content Studio</title>
+  <meta name="theme-color" content="#0A0A0A">
+  
+  <!-- PWA Manifest embutido -->
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJ7Im5hbWUiOiJSTSBDb250ZW50IFN0dWRpbyIsInNob3J0X25hbWUiOiJSTSBTdHVkaW8iLCJzdGFydF91cmwiOiIvc3R1ZGlvLmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMEEwQTBBIiwidGhlbWVfY29sb3IiOiIjMEEwQTBBIn0=">
   
   <style>
-    /* CSS AQUI */
+    /* CSS AQUI - TUDO JUNTO */
     :root {
       --preto: #0A0A0A;
       --branco: #FFFFFF;
       --dourado: #C9A961;
-      --papel: #FAF8F3;
+      --cinza: #333333;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--papel);
-      color: var(--preto);
+      background: var(--preto);
+      color: var(--branco);
       line-height: 1.6;
     }
     
+    /* LOGIN */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .login-card {
+      background: #1a1a1a;
+      padding: 2.5rem;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid #333;
+    }
+    
+    .login-card h1 { margin-bottom: 0.5rem; color: var(--dourado); }
+    .login-card p { color: #999; margin-bottom: 1.5rem; }
+    
+    .login-card input {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #444;
+      border-radius: 12px;
+      background: #222;
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .login-card button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--dourado);
+      color: var(--preto);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .error { color: #ff6b6b; margin-top: 1rem; font-size: 0.9rem; }
+    
+    /* APP */
     header {
-      background: var(--preto);
-      color: var(--branco);
+      background: #1a1a1a;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #333;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     
     header h1 { font-size: 1.3rem; }
     
-    header .btn {
+    header button {
       padding: 0.5rem 1rem;
-      background: var(--dourado);
-      color: var(--preto);
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 700;
-    }
-    
-    .hero {
-      text-align: center;
-      padding: 4rem 2rem;
-      background: linear-gradient(135deg, rgba(201,169,97,0.2), transparent);
-    }
-    
-    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
-    .hero p { font-size: 1.2rem; color: #555; }
-    
-    .search-box {
-      max-width: 700px;
-      margin: -2rem auto 3rem;
-      padding: 2rem;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    }
-    
-    .search-box input {
-      width: 100%;
-      padding: 1rem;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .search-buttons button {
-      width: 100%;
-      padding: 1rem;
-      background: var(--preto);
+      background: transparent;
+      border: 1px solid #444;
       color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
+      border-radius: 8px;
       cursor: pointer;
     }
     
-    .quick-searches {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      justify-content: center;
-    }
-    
-    .quick-searches button {
-      padding: 0.5rem 1rem;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    
-    .quick-searches button:hover {
-      background: var(--dourado);
-      border-color: var(--dourado);
-    }
-    
-    .results {
-      max-width: 900px;
+    main {
+      max-width: 800px;
       margin: 0 auto;
-      padding: 0 2rem 4rem;
+      padding: 2rem 1rem;
     }
     
-    .result-card {
-      background: white;
-      border: 1px solid #ddd;
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
       border-radius: 16px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
     }
     
-    .result-card h3 {
-      color: var(--dourado);
-      margin-bottom: 1rem;
+    .card h2 {
       font-size: 1.2rem;
-    }
-    
-    .result-card .link {
-      display: inline-block;
-      margin-top: 1rem;
+      margin-bottom: 1rem;
       color: var(--dourado);
-      text-decoration: none;
-      font-weight: 700;
     }
     
-    .action-card {
-      background: var(--preto);
+    input[type="text"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.9rem;
+      border: 1px solid #444;
+      border-radius: 12px;
+      background: #222;
       color: white;
-      text-align: center;
-      padding: 2rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: inherit;
     }
     
-    .action-card h3 { margin-bottom: 0.5rem; }
-    .action-card p { margin-bottom: 1.5rem; opacity: 0.8; }
+    textarea { resize: vertical; min-height: 100px; }
     
-    .btn-primary {
-      padding: 1rem 2rem;
-      background: var(--dourado);
-      color: var(--preto);
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #999;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    
+    button {
+      padding: 0.9rem 1.5rem;
       border: none;
       border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      transition: transform 0.2s;
+    }
+    
+    button:active { transform: scale(0.98); }
+    
+    .btn-primary { background: var(--dourado); color: var(--preto); }
+    .btn-gold { background: linear-gradient(135deg, #fbbf24, #f97316); color: #111; }
+    .btn-green { background: linear-gradient(135deg, #22c55e, #14b8a6); color: #051315; }
+    .btn { background: #333; color: white; border: 1px solid #444; }
+    
+    .video-preview video,
+    .preview-stage video {
+      width: 100%;
+      border-radius: 12px;
+      background: #000;
+    }
+    
+    .preview-stage {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      aspect-ratio: 9/16;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    
+    .overlay-text {
+      position: absolute;
+      bottom: 120px;
+      left: 6%;
+      right: 6%;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.4;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+      max-height: 40vh;
+      overflow: hidden;
+    }
+    
+    .cta-box {
+      position: absolute;
+      bottom: 60px;
+      left: 6%;
+      right: 6%;
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111;
+      padding: 10px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.85rem;
+    }
+    
+    .result-box {
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 1rem;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 0.95rem;
     }
     
     @media (max-width: 600px) {
-      .hero h2 { font-size: 1.8rem; }
-      .search-box { margin: -1rem 1rem 2rem; padding: 1.5rem; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .button-group { flex-direction: column; }
+      button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🔍 Busca MPB</h1>
-    <a href="studio.html" class="btn">Ir para Studio</a>
-  </header>
+  <!-- TELA DE LOGIN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h1>🎬 RM Content Studio</h1>
+      <p>Ferramenta de produção de Reels MPB</p>
+      <input type="password" id="passwordInput" placeholder="Digite sua senha">
+      <button onclick="fazerLogin()">Entrar</button>
+      <p id="loginError" class="error"></p>
+    </div>
+  </div>
 
-  <main>
-    <section class="hero">
-      <h2>Centro de Pesquisa da Música Brasileira</h2>
-      <p>Busque artistas, discos, canções em múltiplas fontes simultaneamente</p>
-    </section>
+  <!-- APP PRINCIPAL -->
+  <div id="app" class="app" style="display:none;">
+    <header>
+      <h1>🎬 RM Content Studio</h1>
+      <button onclick="fazerLogout()">Sair</button>
+    </header>
 
-    <section class="search-box">
-      <input type="text" id="searchInput" placeholder="Ex: Cartola, Elis Regina, Tropicália...">
-      <div class="search-buttons">
-        <button onclick="buscarTudo()">🔍 Buscar em Todas Fontes</button>
-      </div>
-      
-      <div class="quick-searches">
-        <button onclick="buscaRapida('Cartola')">Cartola</button>
-        <button onclick="buscaRapida('Chiquinha Gonzaga')">Chiquinha Gonzaga</button>
-        <button onclick="buscaRapida('Elis Regina')">Elis Regina</button>
-        <button onclick="buscaRapida('Tom Jobim')">Tom Jobim</button>
-        <button onclick="buscaRapida('Tropicália')">Tropicália</button>
-      </div>
-    </section>
+    <main>
+      <!-- PASSO 1: DADOS -->
+      <section class="card">
+        <h2>📝 1. Dados do Artista</h2>
+        <input type="text" id="artistaNome" placeholder="Nome do artista (ex: Cartola)">
+        <select id="tipoConteudo">
+          <option value="artista">Artista</option>
+          <option value="musica">Canção</option>
+          <option value="disco">Disco</option>
+          <option value="movimento">Movimento</option>
+        </select>
+        <textarea id="dadosFacts" placeholder="Cole aqui os dados pesquisados: biografia, datas, obras, fatos..." rows="6"></textarea>
+        <textarea id="fontesText" placeholder="Fontes consultadas (uma por linha):&#10;Cravo Albin - https://...&#10;Itaú Cultural - https://..." rows="4"></textarea>
+      </section>
 
-    <section id="results" class="results" style="display:none;">
-      <div class="result-card">
-        <h3>🎵 Cravo Albin</h3>
-        <div id="cravoResult"></div>
-        <a id="cravoLink" target="_blank" class="link">Ver no Cravo Albin →</a>
-      </div>
+      <!-- PASSO 2: VÍDEO -->
+      <section class="card">
+        <h2>🎥 2. Vídeo</h2>
+        <input type="file" id="videoInput" accept="video/*">
+        <div class="video-preview">
+          <video id="videoPreview" controls></video>
+        </div>
+      </section>
 
-      <div class="result-card">
-        <h3>🎨 Itaú Cultural</h3>
-        <div id="itaucResult"></div>
-        <a id="itaucLink" target="_blank" class="link">Ver no Itaú Cultural →</a>
-      </div>
+      <!-- PASSO 3: CONFIGURAÇÕES -->
+      <section class="card">
+        <h2>⚙️ 3. Configurações</h2>
+        <div class="grid-2">
+          <div>
+            <label>Tamanho do texto</label>
+            <select id="textSize">
+              <option value="curto">Curto (~260 caracteres)</option>
+              <option value="medio" selected>Médio (~420 caracteres)</option>
+              <option value="longo">Longo (~560 caracteres)</option>
+            </select>
+          </div>
+          <div>
+            <label>Texto escreve em</label>
+            <select id="writeTime">
+              <option value="20">20 segundos</option>
+              <option value="30" selected>30 segundos</option>
+              <option value="45">45 segundos</option>
+              <option value="60">60 segundos</option>
+              <option value="auto">Automático</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
-      <div class="result-card">
-        <h3>📰 Hemeroteca BN</h3>
-        <div id="bnResult"></div>
-        <a id="bnLink" target="_blank" class="link">Ver na Hemeroteca →</a>
-      </div>
+      <!-- PASSO 4: AÇÕES -->
+      <section class="card">
+        <h2>🎯 4. Gerar e Exportar</h2>
+        <div class="button-group">
+          <button class="btn-primary" onclick="analisarDados()">🔍 Analisar Completude</button>
+          <button class="btn-gold" onclick="gerarNarrativa()">✍️ Gerar Narrativa</button>
+          <button class="btn-green" onclick="playPreview()">▶ Pré-visualizar</button>
+          <button class="btn-gold" onclick="exportarVideo()">⬇ Exportar Vídeo</button>
+          <button class="btn" onclick="baixarTXT()">📄 Baixar Texto</button>
+        </div>
+      </section>
 
-      <div class="result-card">
-        <h3>🎬 YouTube</h3>
-        <div id="youtubeResult"></div>
-        <a id="youtubeLink" target="_blank" class="link">Ver no YouTube →</a>
-      </div>
+      <!-- RESULTADOS -->
+      <section class="card" id="auditSection" style="display:none;">
+        <h2>📊 Auditoria</h2>
+        <div id="auditResult" class="result-box"></div>
+      </section>
 
-      <div class="result-card">
-        <h3>📚 Google Acadêmico</h3>
-        <div id="scholarResult"></div>
-        <a id="scholarLink" target="_blank" class="link">Ver no Google Scholar →</a>
-      </div>
+      <section class="card" id="narrativeSection" style="display:none;">
+        <h2>📜 Narrativa Gerada</h2>
+        <div id="narrativeResult" class="result-box"></div>
+      </section>
 
-      <div class="action-card">
-        <h3>🎯 Enviar para Studio</h3>
-        <p>Copie os dados encontrados e leve para o RM Content Studio</p>
-        <button onclick="enviarParaStudio()" class="btn-primary">Abrir no Studio</button>
-      </div>
-    </section>
-  </main>
+      <!-- PRÉ-VISUALIZAÇÃO -->
+      <section class="card">
+        <h2>👁️ Pré-visualização</h2>
+        <div class="preview-stage">
+          <video id="previewVideo" muted playsinline></video>
+          <div class="overlay-text" id="overlayText"></div>
+          <div class="cta-box" id="ctaBox" style="display:none;">
+            Mais histórias: rmcontarecantar.art.br
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
+  <!-- JAVASCRIPT AQUI - TUDO JUNTO -->
   <script>
-    // JAVASCRIPT AQUI
-    let termoBuscaAtual = '';
+    // CONFIGURAÇÃO
+    const SENHA_CORRETA = 'rmstudio2026'; // MUDE ISSO!
     
-    function buscaRapida(termo) {
-      document.getElementById('searchInput').value = termo;
-      buscarTudo();
-    }
-    
-    function buscarTudo() {
-      const termo = document.getElementById('searchInput').value.trim();
-      if (!termo) {
-        alert('Digite um termo de busca');
-        return;
+    // LOGIN
+    function fazerLogin() {
+      const senha = document.getElementById('passwordInput').value;
+      if (senha === SENHA_CORRETA) {
+        localStorage.setItem('rm_studio_logado', 'true');
+        mostrarApp();
+      } else {
+        document.getElementById('loginError').textContent = 'Senha incorreta';
       }
-      
-      termoBuscaAtual = termo;
-      
-      // Cravo Albin
-      buscarCravoAlbin(termo);
-      
-      // Itaú Cultural
-      buscarItauCultural(termo);
-      
-      // Hemeroteca BN
-      buscarHemeroteca(termo);
-      
-      // YouTube
-      buscarYouTube(termo);
-      
-      // Google Scholar
-      buscarScholar(termo);
-      
-      document.getElementById('results').style.display = 'block';
     }
     
-    function buscarCravoAlbin(termo) {
-      const slug = termo.toLowerCase().replace(/\s+/g, '-');
-      const url = `https://dicionariompb.com.br/${slug}`;
-      
-      document.getElementById('cravoLink').href = url;
-      document.getElementById('cravoResult').innerHTML = 
-        `<p>Buscando "${termo}" no Dicionário Cravo Albin...</p>`;
+    function fazerLogout() {
+      localStorage.removeItem('rm_studio_logado');
+      location.reload();
     }
     
-    function buscarItauCultural(termo) {
-      const url = `https://enciclopedia.itaucultural.org.br/pessoa?query=${encodeURIComponent(termo)}`;
-      
-      document.getElementById('itaucLink').href = url;
-      document.getElementById('itaucResult').innerHTML = 
-        `<p>Buscando "${termo}" na Enciclopédia Itaú Cultural...</p>`;
+    function mostrarApp() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
     }
     
-    function buscarHemeroteca(termo) {
-      const url = `https://hemerotecadigital.bn.gov.br/?query=${encodeURIComponent(termo)}`;
-      
-      document.getElementById('bnLink').href = url;
-      document.getElementById('bnResult').innerHTML = 
-        `<p>Buscando "${termo}" na Hemeroteca Digital...</p>`;
+    // Verificar se já está logado
+    if (localStorage.getItem('rm_studio_logado') === 'true') {
+      mostrarApp();
     }
     
-    function buscarYouTube(termo) {
-      const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(termo + ' música brasileira')}`;
+    // VÍDEO
+    const videoInput = document.getElementById('videoInput');
+    const videoPreview = document.getElementById('videoPreview');
+    const previewVideo = document.getElementById('previewVideo');
+    
+    videoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        videoPreview.src = url;
+        previewVideo.src = url;
+      }
+    });
+    
+    // ANÁLISE DE DADOS
+    function analisarDados() {
+      const facts = document.getElementById('dadosFacts').value;
+      const fontes = document.getElementById('fontesText').value;
       
-      document.getElementById('youtubeLink').href = url;
-      document.getElementById('youtubeResult').innerHTML = 
-        `<p>Buscando vídeos sobre "${termo}"...</p>`;
+      const auditoria = [];
+      
+      // Verificar datas
+      const datas = facts.match(/\b(18|19|20)\d{2}\b/g) || [];
+      auditoria.push(`✓ Datas encontradas: ${datas.length} (${[...new Set(datas)].join(', ')})`);
+      
+      // Verificar fontes
+      const links = fontes.match(/https?:\/\/[^\s]+/g) || [];
+      auditoria.push(`✓ Fontes com link: ${links.length}`);
+      
+      // Verificar volume
+      auditoria.push(`✓ Tamanho do texto: ${facts.length} caracteres`);
+      
+      document.getElementById('auditResult').innerHTML = auditoria.join('<br><br>');
+      document.getElementById('auditSection').style.display = 'block';
     }
     
-    function buscarScholar(termo) {
-      const url = `https://scholar.google.com/scholar?q=${encodeURIComponent(termo + ' música brasileira MPB')}`;
+    // GERAR NARRATIVA
+    function gerarNarrativa() {
+      const artista = document.getElementById('artistaNome').value || 'Artista';
+      const facts = document.getElementById('dadosFacts').value;
+      const tamanho = document.getElementById('textSize').value;
       
-      document.getElementById('scholarLink').href = url;
-      document.getElementById('scholarResult').innerHTML = 
-        `<p>Buscando artigos acadêmicos sobre "${termo}"...</p>`;
+      const maxChars = tamanho === 'curto' ? 260 : tamanho === 'longo' ? 560 : 420;
+      
+      let narrativa = `${artista}: uma história da música brasileira.\n\n`;
+      narrativa += facts.substring(0, maxChars);
+      
+      document.getElementById('narrativeResult').textContent = narrativa;
+      document.getElementById('narrativeSection').style.display = 'block';
+      
+      window.narrativaAtual = narrativa;
     }
     
-    function enviarParaStudio() {
-      localStorage.setItem('rm_busca_termo', termoBuscaAtual);
-      window.open('studio.html', '_blank');
+    // PRÉ-VISUALIZAÇÃO
+    function playPreview() {
+      if (!window.narrativaAtual) gerarNarrativa();
+      
+      const texto = window.narrativaAtual;
+      const overlay = document.getElementById('overlayText');
+      const cta = document.getElementById('ctaBox');
+      
+      previewVideo.currentTime = 0;
+      previewVideo.play();
+      
+      overlay.textContent = '';
+      cta.style.display = 'none';
+      
+      let i = 0;
+      const intervalo = setInterval(() => {
+        overlay.textContent = texto.substring(0, i);
+        i++;
+        if (i > texto.length) {
+          clearInterval(intervalo);
+          cta.style.display = 'block';
+        }
+      }, 50);
+    }
+    
+    // EXPORTAR VÍDEO
+    function exportarVideo() {
+      alert('Funcionalidade de exportação em desenvolvimento.\n\nPor enquanto, use a pré-visualização e grave a tela do celular.');
+    }
+    
+    // BAIXAR TEXTO
+    function baixarTXT() {
+      const artista = document.getElementById('artistaNome').value || 'Artista';
+      const narrativa = document.getElementById('narrativeResult').textContent;
+      const fontes = document.getElementById('fontesText').value;
+      
+      const conteudo = `RM Content Studio - Reel: ${artista}\n\nNARRATIVA:\n${narrativa}\n\nFONTES:\n${fontes}`;
+      
+      const blob = new Blob([conteudo], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `reel-${artista.toLowerCase().replace(/\s/g, '-')}.txt`;
+      a.click();
     }
   </script>
 </body>
